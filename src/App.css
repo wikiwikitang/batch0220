@@ -1,3 +1,8 @@
 .is-completed {
   text-decoration: line-through;
 }
+
+.todo-item-content {
+  cursor: pointer;
+  user-select: none;
+}
