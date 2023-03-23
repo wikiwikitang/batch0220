@@ -1,32 +1,16 @@
-import { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { TodoContext } from '../context/index';
+
+import { modTodo, delTodo } from '../actions/index';
 
 const TodoItem = ({ todo, index }) => {
-  const { setTodos } = useContext(TodoContext);
+  const dispatch = useDispatch();
   const { content, isCompleted } = todo;
-
-  const modTodo = () => {
-    setTodos((pre) => {
-      return pre.map((preTodo, i) => {
-        if (index !== i) {
-          return preTodo;
-        }
-        return { ...preTodo, isCompleted: !preTodo.isCompleted };
-      });
-    });
-  };
-
-  const delTodo = () => {
-    setTodos((pre) => {
-      return [...pre.slice(0, index), ...pre.slice(index + 1)];
-    });
-  };
 
   return (
     <li>
       <span
-        onDoubleClick={modTodo}
+        onDoubleClick={() => dispatch(modTodo(index))}
         className={classNames({
           'is-completed': isCompleted,
           'todo-item-content': true,
@@ -34,7 +18,7 @@ const TodoItem = ({ todo, index }) => {
       >
         {content}
       </span>
-      <button onClick={delTodo}>Delete</button>
+      <button onClick={() => dispatch(delTodo(index))}>Delete</button>
     </li>
   );
 };

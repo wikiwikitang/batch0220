@@ -1,20 +1,20 @@
-import { useState, useContext, useRef } from 'react';
-import { TodoContext } from '../context/index';
+import { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { addTodo } from '../actions/index';
 
 const TodoInput = () => {
   const [userInput, setUserInput] = useState('');
-  const { setTodos } = useContext(TodoContext);
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const addTodo = () => {
+  const handleAddTodo = () => {
     if (!userInput.trim()) {
       setUserInput('');
       return;
     }
 
-    setTodos((pre) => {
-      return [...pre, { content: userInput, isCompleted: false }];
-    });
+    dispatch(addTodo(userInput));
     setUserInput('');
     inputRef.current.focus();
   };
@@ -25,7 +25,7 @@ const TodoInput = () => {
       return;
     }
 
-    addTodo();
+    handleAddTodo();
   };
 
   return (
@@ -36,7 +36,7 @@ const TodoInput = () => {
         onKeyDown={(e) => handleOnEnterDown(e)}
         ref={inputRef}
       />
-      <button onClick={addTodo}>Add</button>
+      <button onClick={handleAddTodo}>Add</button>
     </div>
   );
 };
