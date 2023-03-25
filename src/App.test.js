@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import TodoHeader from './components/TodoHeader';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('render Todo App Header', () => {
+  render(<TodoHeader />);
+  const todoHeader = screen.getByText(/Todo/i);
+  expect(todoHeader).toBeInTheDocument();
 });
