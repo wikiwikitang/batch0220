@@ -35,8 +35,11 @@ const TodoInput = () => {
         onChange={(e) => setUserInput(e.target.value)}
         onKeyDown={(e) => handleOnEnterDown(e)}
         ref={inputRef}
+        data-testid='add-todo-input-field'
       />
-      <button onClick={handleAddTodo}>Add</button>
+      <button onClick={handleAddTodo} data-testid='add-todo-btn'>
+        Add
+      </button>
     </div>
   );
 };

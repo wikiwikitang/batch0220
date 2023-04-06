@@ -8,7 +8,7 @@ const TodoItem = ({ todo, index }) => {
   const { content, isCompleted } = todo;
 
   return (
-    <li>
+    <li data-testid={`${content}-${index}`}>
       <span
         onDoubleClick={() => dispatch(modTodo(index))}
         className={classNames({
