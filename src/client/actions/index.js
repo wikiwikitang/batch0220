@@ -8,10 +8,13 @@ import {
   RESET_ERROR,
 } from '../enum/index';
 import { todoApi } from '../apis/index';
+import { ajaxConfigHelper } from '../helper/index';
 
 export const initTodo = () => async (dispatch) => {
   try {
-    const todos = await todoApi.getAllTodos();
+    //const todos = await todoApi.getAllTodos();
+    const todosResponse = await fetch('/allTodos');
+    const todos = await todosResponse.json();
     dispatch({
       type: INIT_TODO,
       payload: todos,
@@ -27,8 +30,8 @@ export const initTodo = () => async (dispatch) => {
 };
 
 export const addTodo = (content) => (dispatch) => {
-  todoApi
-    .addTodo({ content, isCompleted: false })
+  fetch('/addTodo', ajaxConfigHelper({ content, isCompleted: false }))
+    .then((response) => response.json())
     .then(() => {
       dispatch({
         type: ADD_TODO,
@@ -48,7 +51,14 @@ export const addTodo = (content) => (dispatch) => {
 
 export const modTodo = (index) => async (dispatch) => {
   try {
-    const data = await todoApi.modTodo(index);
+    //const data = await todoApi.modTodo(index);
+    const response = await fetch(
+      '/modTodo',
+      ajaxConfigHelper({ index }, 'PUT')
+    );
+    const result = await response.json();
+    console.log(result);
+
     dispatch({
       type: MOD_TODO,
       payload: index,
@@ -63,7 +73,13 @@ export const modTodo = (index) => async (dispatch) => {
 
 export const delTodo = (index) => async (dispatch) => {
   try {
-    const data = await todoApi.delTodo(index);
+    // const data = await todoApi.delTodo(index);
+    const response = await fetch(
+      '/delTodo',
+      ajaxConfigHelper({ index }, 'DELETE')
+    );
+    const result = await response.json();
+    console.log(result);
     dispatch({
       type: DEL_TODO,
       payload: index,

@@ -22,14 +22,76 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 
-const todos = [
+let todos = [
   { content: 'write some code', isCompleted: false },
   { content: 'watch some movies', isCompleted: false },
   { content: 'listen some music', isCompleted: false },
 ];
 
+const verifyTodoPayload = ({ req, isAddTodo = false }) => {
+  return isAddTodo
+    ? req.body && req.body.content && req.body.isCompleted !== undefined
+    : req.body && req.body.index >= 0 && req.body.index < todos.length;
+};
+
+//1.GET method => return all todos in the mock database
 app.get('/allTodos', (_, res) => {
   res.json(todos);
+});
+
+//2.Post method => add a todo into mock database
+//all the data will be put in the req.body => {content:'dfdsfads',isCompleted: false}
+app.post('/addTodo', (req, res) => {
+  if (verifyTodoPayload({ req, isAddTodo: true })) {
+    todos = [...todos, req.body];
+    res.status(201).json({
+      message: 'succeed',
+      status: 201,
+    });
+    return;
+  }
+
+  //error handling
+  res.status(404).json({
+    error: 'failed',
+    message: 'Input is not valid',
+  });
+});
+
+// 3. Put method => modify isCompleted to be the opposite value
+app.put('/modTodo', (req, res) => {
+  if (verifyTodoPayload({ req })) {
+    const index = req.body.index;
+    todos[index].isCompleted = !todos[index].isCompleted;
+    res.json({
+      message: 'succeed',
+    });
+    return;
+  }
+
+  //error handling
+  res.status(404).json({
+    error: 'failed',
+    message: 'Input is not valid',
+  });
+});
+
+// 4. Delete method => delete one todo based on the the index passed by FE
+app.delete('/delTodo', (req, res) => {
+  if (verifyTodoPayload({ req })) {
+    const index = req.body.index;
+    todos = [...todos.slice(0, index), ...todos.slice(index + 1)];
+    res.json({
+      message: 'succeed',
+    });
+    return;
+  }
+
+  //error handling
+  res.status(404).json({
+    error: 'failed',
+    message: 'Input ins not valid',
+  });
 });
 
 // catch 404 and forward to error handler

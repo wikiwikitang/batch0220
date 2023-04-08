@@ -13,6 +13,10 @@ import './App.css';
 //1. useConText 2.redux
 
 //dispatch async action => redux thunk intercept action and execute the async logic here => when the async logic is done, dispatch the action to the reducer => reducer update state => component connect to the global store/redux store will receice the update => re-render the component
+
+//FE => port number => 3000
+//BE => port number => 3002
+
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
